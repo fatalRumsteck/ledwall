@@ -73,6 +73,10 @@ public class Controller {
 		sliderBlue.setValue((rectColor.getBlue()*255)/16);
 	}
 
+	@FXML 
+	private void playAnimation (ActionEvent event){
+		
+	}
 	@FXML
 	private void timeOnChange() {
 

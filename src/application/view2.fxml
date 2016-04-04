@@ -31,7 +31,9 @@
                <top>
                   <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                     <items>
-                      <Button mnemonicParsing="false" text="Button" />
+                      <Button fx:id="btnStart" mnemonicParsing="false" onAction="#playAnimation" text="Play" />
+                        <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="1.0" />
+                        <Button mnemonicParsing="false" text="Button" />
                     </items>
                   </ToolBar>
                </top>
