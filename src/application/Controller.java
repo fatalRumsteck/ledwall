@@ -15,10 +15,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -32,12 +34,16 @@ public class Controller {
 	private GridPane gpWall;
 	private Color currentColor;
 	private EventHandler<MouseEvent> mouseHandler ;
+	private PlayThread thread;
 
+	@FXML
+	private TextField tfRed, tfMotifNumber, tfMotifTime, tfGreen, tfBlue;
+	
 	@FXML
 	private Rectangle rectColor;
 
 	@FXML
-	private Button btnStart;
+	private Button btnPlay, btnPlayAll, btnStop, btnAddEmptyMotif, btnDuplicateMotif, btnDeleteMotif;
 
 	@FXML
 	private Label lbMotifNumber;
@@ -49,39 +55,14 @@ public class Controller {
 	private Slider sliderMotif, sliderRed, sliderGreen, sliderBlue;
 
 	@FXML
-	private TextField tfRed, tfMotifNumber, tfMotifTime, tfGreen, tfBlue;
-
-	@FXML
-	private void addMotif(ActionEvent event) {
-
-		if (currentAnimation != null) {
-			Motif newMotif = new Motif(currentAnimation.getWidth(), currentAnimation.getHeigh());
-			currentAnimation.add(newMotif);
-			currentMotif = newMotif;
-
-			updateIHM();
-			updateWallFromMotif();
-		}
-	}
+	private VBox vbRightPane;
 	
 	@FXML
-	private void onColorExamplePressed (MouseEvent event){
-		Rectangle rect = (Rectangle)event.getSource();
-		Color rectColor = (Color)rect.getFill();
-		sliderRed.setValue((rectColor.getRed()*255)/16);
-		sliderGreen.setValue((rectColor.getGreen()*255)/16);
-		sliderBlue.setValue((rectColor.getBlue()*255)/16);
-	}
-
-	@FXML 
-	private void playAnimation (ActionEvent event){
-		
-	}
+	private HBox hbSelectMotifPane;
+	
 	@FXML
-	private void timeOnChange() {
-
-	}
-
+	private SplitPane spMainPane;
+	
 	@FXML
 	private void createNewAnimation(ActionEvent event) throws IOException {
 
@@ -134,25 +115,107 @@ public class Controller {
 				Motif newMotif = new Motif(nbColumns, nbRows);
 
 				currentAnimation = new Animation(hmInformation.get("Name"), nbColumns, nbRows);
-				currentAnimation.add(newMotif);
+				currentAnimation.add(0, newMotif);
 				currentMotif = newMotif;
-
-				/*
-				 * Pas Marché
-				 * 
-				 * Stage stage = (Stage)btnStart.getScene().getWindow();
-				 * stage.setTitle("Animation Editor - " +
-				 * hmInformation.get("Name"));
-				 * 
-				 */
+				setDisable(false);
 				updateIHM();
 			} else {
 				// throw something
 			}
 		}
 	}
+	
+	@FXML
+	private void addMotif(ActionEvent event) {
 
-	private Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
+		if (currentAnimation != null) {
+			Motif newMotif = new Motif(currentAnimation.getWidth(), currentAnimation.getHeigh()); 
+			
+			if((Button)event.getSource() == btnDuplicateMotif){
+				updateMotifFromWall(newMotif);
+				newMotif.setTime(currentMotif.getTime());
+			}
+			
+			currentAnimation.add(currentMotif.getId(), newMotif);
+			currentMotif = newMotif;
+			btnDeleteMotif.setDisable(false);
+			updateIHM();
+			updateWallFromMotif();
+		}
+	}
+	
+	@FXML
+	private void colorExamplePressed (MouseEvent event){
+		Rectangle rect = (Rectangle)event.getSource();
+		Color rectColor = (Color)rect.getFill();
+		sliderRed.setValue((rectColor.getRed()*255)/16);
+		sliderGreen.setValue((rectColor.getGreen()*255)/16);
+		sliderBlue.setValue((rectColor.getBlue()*255)/16);
+	}
+
+	@FXML 
+	private void playAllAnimation (ActionEvent event){
+		if(currentAnimation != null){
+			setDisableIHMforPlay(true);
+			thread = new PlayThread(this, 0);
+			thread.start();
+		}
+	}
+	
+	@FXML
+	private void deleteMotif(){
+		if(currentAnimation != null && currentAnimation.size() != 1){
+			int id = currentMotif.getId();
+			
+			if(id == 1){
+				currentMotif = currentAnimation.getMotif(id+1);	
+			}
+			else{
+				currentMotif = currentAnimation.getMotif(id-1);		
+			}
+			
+			currentAnimation.remove(id);
+			updateIHM();
+			updateWallFromMotif();
+		}
+		if(currentAnimation.size() != 1){
+			btnDeleteMotif.setDisable(true);
+		}
+		
+	}	
+	
+	@FXML 
+	private void playAnimation (ActionEvent event){
+		if(currentAnimation != null){
+			setDisableIHMforPlay(true);
+			thread = new PlayThread(this, currentMotif.getId());
+			thread.start();
+		}
+	}
+	
+	public void setDisableIHMforPlay(boolean bool){
+		btnPlay.setDisable(bool);
+		btnPlayAll.setDisable(bool);
+		btnStop.setDisable(!bool);
+		btnDuplicateMotif.setDisable(bool);
+		btnAddEmptyMotif.setDisable(bool);
+		btnDeleteMotif.setDisable(bool);
+		vbRightPane.setDisable(bool);
+		hbSelectMotifPane.setDisable(bool);
+	}
+	
+	private void setDisable(boolean bool){
+		spMainPane.setDisable(bool);
+	}
+	
+	@FXML
+	private void stopAnimation(){
+		thread.stopThread();
+		setDisableIHMforPlay(false);
+		updateWallFromMotif();
+	}
+	
+	static public Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
 		for (Node node : gridPane.getChildren()) {
 			if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
 				return node;
@@ -162,8 +225,7 @@ public class Controller {
 	}
 
 	private void updateCurrentColor() {
-		currentColor = Color.rgb(Integer.valueOf(tfRed.getText()) * 16, Integer.valueOf(tfGreen.getText()) * 16,
-				Integer.valueOf(tfBlue.getText()) * 16);
+		currentColor = Color.rgb(Integer.valueOf(tfRed.getText()) * 16, Integer.valueOf(tfGreen.getText()) * 16,Integer.valueOf(tfBlue.getText()) * 16);
 		rectColor.setFill(currentColor);
 	}
 
@@ -185,18 +247,34 @@ public class Controller {
 			}
 		}
 	}
+	
+	private void updateMotifFromWall(Motif m) {
+		for (int i = 0; i < currentAnimation.getWidth(); i++) {
+			for (int j = 0; j < currentAnimation.getHeigh(); j++) {
+				Rectangle currentRect = (Rectangle) getNodeFromGridPane(gpWall, i, j);
+				m.setColor((Color) currentRect.getFill(), i, j);
+			}
+		}
+	}
 
 	private void updateIHM() {
 		sliderMotif.setMin(1);
 		sliderMotif.setMax(currentAnimation.size());
 		sliderMotif.setValue(currentMotif.getId());
-		tfMotifNumber.setText(String.valueOf(currentMotif.getId()));
 		lbMotifNumber.setText("Motif n°" + String.valueOf(currentMotif.getId()));
 		tfMotifTime.setText(String.valueOf(currentMotif.getTime()));
 	}
-
+	
+	private void updateMotifTime(){
+		currentMotif.setTime(Integer.valueOf(tfMotifTime.getText()));
+	}
+	
 	public void initialization() {
-
+		
+		setDisable(true);
+		
+		gpWall = new GridPane();
+		currentColor = Color.BLACK;
 		
 		mouseHandler = new EventHandler<MouseEvent>() {
 			@Override
@@ -206,18 +284,7 @@ public class Controller {
 				updateMotifFromWall();	
 			}
 		};
-		
-		gpWall = new GridPane();
-		/*
-		gpWall.setOnMousePressed(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent mouseEvent) {
-				Rectangle rect = (Rectangle)mouseEvent.getTarget();
-				rect.setFill(currentColor);
-				updateMotifFromWall();	
-			}
-		});
-		*/
+
 		tfMotifNumber.textProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -230,6 +297,17 @@ public class Controller {
 					} else {
 						tfMotifNumber.setText(oldValue);
 					}
+				}
+			}
+		});
+		
+		tfMotifTime.textProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				if (newValue.matches("[\\d]+") && Integer.valueOf(newValue) >= 1 && Integer.valueOf(newValue) <= 65535) {
+					updateMotifTime();
+				} else {
+					tfMotifTime.setText(oldValue);
 				}
 			}
 		});
@@ -298,5 +376,13 @@ public class Controller {
 			}
 		});
 
+	}
+	
+	public Animation getAnimation(){
+		return currentAnimation;
+	}
+	
+	public GridPane getWall(){
+		return gpWall;
 	}
 }

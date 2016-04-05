@@ -8,17 +8,16 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controller">
+<BorderPane minHeight="430.0" minWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controller">
    <center>
-      <SplitPane dividerPositions="0.5" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <SplitPane fx:id="spMainPane" dividerPositions="0.5" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <items>
             <BorderPane fx:id="bpWall" minHeight="400.0" minWidth="600.0" prefHeight="400.0" prefWidth="600.0">
                <bottom>
-                  <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" spacing="10.0" BorderPane.alignment="CENTER_RIGHT">
+                  <HBox fx:id="hbSelectMotifPane" alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" spacing="10.0" BorderPane.alignment="CENTER_RIGHT">
                      <children>
                         <Slider fx:id="sliderMotif" blockIncrement="1.0" majorTickUnit="1.0" max="0.0" minWidth="450.0" minorTickCount="1" showTickMarks="true" snapToTicks="true" />
                         <TextField fx:id="tfMotifNumber" minWidth="50.0" prefWidth="80.0" text="0" />
-                        <Button minWidth="30.0" mnemonicParsing="false" onAction="#addMotif" text="+" />
                      </children>
                      <BorderPane.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -31,14 +30,19 @@
                <top>
                   <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                     <items>
-                      <Button fx:id="btnStart" mnemonicParsing="false" onAction="#playAnimation" text="Play" />
+                      <Button fx:id="btnPlayAll" mnemonicParsing="false" onAction="#playAllAnimation" text="PlayAll" />
+                        <Button fx:id="btnPlay" mnemonicParsing="false" onAction="#playAnimation" text="Play" />
+                        <Button fx:id="btnStop" disable="true" mnemonicParsing="false" onAction="#stopAnimation" text="Stop" />
                         <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="1.0" />
-                        <Button mnemonicParsing="false" text="Button" />
+                        <Button fx:id="btnAddEmptyMotif" mnemonicParsing="false" onAction="#addMotif" text="AddEmptyMotif" />
+                        <Button fx:id="btnDuplicateMotif" mnemonicParsing="false" onAction="#addMotif" text="DuplicateMotif" />
+                        <Button fx:id="btnDeleteMotif" mnemonicParsing="false" onAction="#deleteMotif" text="DeleteMotif" />
+                        <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" />
                     </items>
                   </ToolBar>
                </top>
             </BorderPane>
-            <VBox alignment="CENTER_LEFT">
+            <VBox fx:id="vbRightPane" alignment="CENTER_LEFT">
                <children>
                   <Label fx:id="lbMotifNumber" text="Motif n°x" />
                   <HBox alignment="CENTER">
@@ -53,7 +57,10 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </HBox>
-                  <Separator prefWidth="200.0" />
+                  <Separator prefWidth="200.0">
+                     <VBox.margin>
+                        <Insets bottom="5.0" top="5.0" />
+                     </VBox.margin></Separator>
                   <HBox alignment="CENTER">
                      <children>
                         <GridPane>
@@ -74,23 +81,26 @@
                             <RowConstraints />
                           </rowConstraints>
                            <children>
-                              <Rectangle arcHeight="5.0" arcWidth="5.0" height="15.0" onMouseClicked="#onColorExamplePressed" stroke="BLACK" strokeType="INSIDE" width="15.0" />
-                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f0f0f0" height="15.0" onMouseClicked="#onColorExamplePressed" stroke="BLACK" strokeType="INSIDE" width="15.0" GridPane.columnIndex="1">
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" height="15.0" onMouseClicked="#colorExamplePressed" stroke="BLACK" strokeType="INSIDE" width="15.0" />
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f0f0f0" height="15.0" onMouseClicked="#colorExamplePressed" stroke="BLACK" strokeType="INSIDE" width="15.0" GridPane.columnIndex="1">
                                  <GridPane.margin>
                                     <Insets />
                                  </GridPane.margin>
                               </Rectangle>
-                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f00000" height="15.0" onMouseClicked="#onColorExamplePressed" stroke="BLACK" strokeType="INSIDE" width="15.0" GridPane.columnIndex="2" />
-                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#0000f0" height="15.0" onMouseClicked="#onColorExamplePressed" stroke="BLACK" strokeType="INSIDE" width="15.0" GridPane.columnIndex="3" />
-                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00f000" height="15.0" onMouseClicked="#onColorExamplePressed" stroke="BLACK" strokeType="INSIDE" width="15.0" GridPane.columnIndex="4" />
-                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f000d2" height="15.0" onMouseClicked="#onColorExamplePressed" stroke="BLACK" strokeType="INSIDE" width="15.0" GridPane.columnIndex="5" />
-                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f08700" height="15.0" onMouseClicked="#onColorExamplePressed" stroke="BLACK" strokeType="INSIDE" width="15.0" GridPane.columnIndex="6" />
-                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f0f000" height="15.0" onMouseClicked="#onColorExamplePressed" stroke="BLACK" strokeType="INSIDE" width="15.0" GridPane.columnIndex="7" />
-                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00f0f0" height="15.0" onMouseClicked="#onColorExamplePressed" stroke="BLACK" strokeType="INSIDE" width="15.0" GridPane.columnIndex="8" />
-                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d200f0" height="15.0" onMouseClicked="#onColorExamplePressed" stroke="BLACK" strokeType="INSIDE" width="15.0" GridPane.columnIndex="9" />
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f00000" height="15.0" onMouseClicked="#colorExamplePressed" stroke="BLACK" strokeType="INSIDE" width="15.0" GridPane.columnIndex="2" />
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#0000f0" height="15.0" onMouseClicked="#colorExamplePressed" stroke="BLACK" strokeType="INSIDE" width="15.0" GridPane.columnIndex="3" />
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00f000" height="15.0" onMouseClicked="#colorExamplePressed" stroke="BLACK" strokeType="INSIDE" width="15.0" GridPane.columnIndex="4" />
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f000d2" height="15.0" onMouseClicked="#colorExamplePressed" stroke="BLACK" strokeType="INSIDE" width="15.0" GridPane.columnIndex="5" />
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f08700" height="15.0" onMouseClicked="#colorExamplePressed" stroke="BLACK" strokeType="INSIDE" width="15.0" GridPane.columnIndex="6" />
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f0f000" height="15.0" onMouseClicked="#colorExamplePressed" stroke="BLACK" strokeType="INSIDE" width="15.0" GridPane.columnIndex="7" />
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00f0f0" height="15.0" onMouseClicked="#colorExamplePressed" stroke="BLACK" strokeType="INSIDE" width="15.0" GridPane.columnIndex="8" />
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d200f0" height="15.0" onMouseClicked="#colorExamplePressed" stroke="BLACK" strokeType="INSIDE" width="15.0" GridPane.columnIndex="9" />
                            </children>
                         </GridPane>
                      </children>
+                     <VBox.margin>
+                        <Insets bottom="5.0" top="5.0" />
+                     </VBox.margin>
                   </HBox>
                   <Label text="Red" />
                   <HBox alignment="CENTER">

@@ -1,11 +1,11 @@
 package application;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Animation {
 	
 	private String name;
-	private ArrayList<Motif> Motifs;
+	private LinkedList<Motif> Motifs;
 	private int width;
 	private int heigh;
 	
@@ -13,22 +13,32 @@ public class Animation {
 		this.name = name;
 		this.width = width;
 		this.heigh = heigh;
-		Motifs = new ArrayList<Motif>();
+		Motifs = new LinkedList<Motif>();
 	}
 	
 
 	public int size(){
 		return Motifs.size();
 	} 
-	public void add(Motif m){
-		Motifs.add(m);
-		m.setId(Motifs.size());
+	public void add(int id, Motif m){
+		Motifs.add(id, m);
+		refreshID();
+		
 	}
 	public void remove(int index){
-		Motifs.remove(index);
+		Motifs.remove(index-1);
+		refreshID();
 	}
 
+	public void refreshID(){
+		for(int i = 0 ; i < Motifs.size() ; i++){
+			Motifs.get(i).setId(i);
+		}
+	}
 	
+	public LinkedList<Motif> getMotifs(){
+		return Motifs;
+	}
 	
 	public Motif getMotif(int id){
 		return Motifs.get(id-1);

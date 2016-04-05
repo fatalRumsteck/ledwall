@@ -1,6 +1,6 @@
 package application;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import javafx.scene.paint.Color;
 
@@ -8,14 +8,14 @@ public class Motif {
 	
 	private int id;
 	private int time;
-	private ArrayList<ArrayList<Color>> leds;
+	private LinkedList<LinkedList<Color>> leds;
 	
 	
 	public void setId(int id){
 		this.id = id;
 	}
 	public int getId(){
-		return this.id;
+		return this.id+1;
 	}
 	public void setTime(int time){
 		this.time = time;
@@ -31,10 +31,10 @@ public class Motif {
 	public Motif(int width, int heigh){
 		
 		time = 1;		
-		leds = new ArrayList<ArrayList<Color>>();
+		leds = new LinkedList<LinkedList<Color>>();
 		
 		for(int i = 0 ; i < width ; i ++){
-			leds.add(new ArrayList<Color>());
+			leds.add(new LinkedList<Color>());
 			for(int j = 0 ; j < heigh ; j ++){
 				Color white = Color.WHITE;
 				leds.get(i).add(white);
