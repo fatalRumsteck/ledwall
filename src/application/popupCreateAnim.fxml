@@ -19,9 +19,9 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <TextField fx:id="tfName" GridPane.columnIndex="1" />
-            <TextField fx:id="tfRow" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="tfColumn" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <TextField fx:id="tfName" text="Name" GridPane.columnIndex="1" />
+            <TextField fx:id="tfRow" text="5" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="tfColumn" text="5" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>

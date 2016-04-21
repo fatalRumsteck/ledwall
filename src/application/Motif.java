@@ -8,7 +8,8 @@ public class Motif {
 	
 	private int id;
 	private int time;
-	private LinkedList<LinkedList<Color>> leds;
+	private int width;
+	private LinkedList<Color> leds;
 	
 	
 	public void setId(int id){
@@ -25,27 +26,32 @@ public class Motif {
 	}
 	
 	public Color getColor(int column, int row){
-		return leds.get(column).get(row);
+		return leds.get(column + row*width);
+	}
+	
+	public LinkedList<Color> getLeds(){
+		return leds;
 	}
 	
 	public Motif(int width, int heigh){
 		
-		time = 1;		
-		leds = new LinkedList<LinkedList<Color>>();
+		this.time = 1;		
+		this.leds = new LinkedList<Color>();
+		this.width = width;
 		
-		for(int i = 0 ; i < width ; i ++){
-			leds.add(new LinkedList<Color>());
-			for(int j = 0 ; j < heigh ; j ++){
-				Color white = Color.WHITE;
-				leds.get(i).add(white);
-			}
+		for(int i = 0 ; i < heigh*width ; i ++){
+			Color white = Color.WHITE;
+			leds.add(white);
 		}
 	}
 	
 	public void setColor(Color color, int column, int row){
-		leds.get(column).set(row, color);
+		leds.set(column + row*width, color);
 	}
 	
+	public void setColor(Color color, int id){
+		leds.set(id-1, color);
+	}
 	
 	
 }

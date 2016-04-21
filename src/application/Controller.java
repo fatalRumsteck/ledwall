@@ -1,7 +1,9 @@
 package application;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import org.jdom2.*;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -12,6 +14,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -24,6 +28,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -43,7 +48,7 @@ public class Controller {
 	private Rectangle rectColor;
 
 	@FXML
-	private Button btnPlay, btnPlayAll, btnStop, btnAddEmptyMotif, btnDuplicateMotif, btnDeleteMotif;
+	private Button btnPlay, btnPlayAll, btnStop, btnAddEmptyMotif, btnDuplicateMotif, btnDeleteMotif, btnClear;
 
 	@FXML
 	private Label lbMotifNumber;
@@ -65,7 +70,6 @@ public class Controller {
 	
 	@FXML
 	private void createNewAnimation(ActionEvent event) throws IOException {
-
 		HashMap<String, String> hmInformation = new HashMap<String, String>();
 
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("popupCreateAnim.fxml"));
@@ -89,40 +93,101 @@ public class Controller {
 				// Create a GridPane
 				int nbRows = Integer.parseUnsignedInt(hmInformation.get("Rows"));
 				int nbColumns = Integer.parseUnsignedInt(hmInformation.get("Columns"));
-
-				gpWall.setPrefWidth(nbColumns * 20);
-				gpWall.setPrefHeight(nbRows * 20);
-
-				for (int i = 0; i < nbColumns; i++) {
-					for (int j = 0; j < nbRows; j++) {
-						Rectangle myRect = new Rectangle(20, 20);
-
-						/*
-						 * Définition du comportement du rectangle suite à un
-						 * clic
-						 */
-						myRect.setOnMouseClicked(mouseHandler);
-						myRect.setFill(Color.WHITE);
-						gpWall.add(myRect, i, j);
-					}
-				}
-
-				// Add the GridPane in the center of the borderPane
-				gpWall.setGridLinesVisible(true);
-				gpWall.setAlignment(Pos.CENTER);
-				bpWall.setCenter(gpWall);
-
+				
+				initializeGpWall(nbColumns, nbRows);
+				
 				Motif newMotif = new Motif(nbColumns, nbRows);
 
 				currentAnimation = new Animation(hmInformation.get("Name"), nbColumns, nbRows);
 				currentAnimation.add(0, newMotif);
 				currentMotif = newMotif;
+				clearAMotif(currentMotif);
 				setDisable(false);
+				btnDeleteMotif.setDisable(true);
 				updateIHM();
 			} else {
 				// throw something
 			}
 		}
+	}
+	
+	@FXML
+	private void saveAnimation(ActionEvent event){
+		Document document = XmlBuilder.buildXML(currentAnimation);
+		
+		final FileChooser dialog = new FileChooser(); 
+	    final File file = dialog.showSaveDialog(tfRed.getScene().getWindow());
+		
+	    if(file != null){
+	    	XmlBuilder.saveXML(file.getPath(), document);
+	    }
+	    else{
+	    	Alert alert = new Alert(AlertType.ERROR);
+	    	alert.setTitle("Error");
+	    	alert.setHeaderText("Error");
+	    	alert.setContentText("Save error");
+	    	alert.showAndWait();
+	    }
+	}
+	
+	@FXML
+	private void openAnimation(ActionEvent event){
+		final FileChooser dialog = new FileChooser(); 
+		final File file = dialog.showOpenDialog(tfRed.getScene().getWindow());
+		
+	    if(file != null){
+		    currentAnimation = XmlBuilder.openAnimation(file.getPath());//file.getPath(), currentAnimation);
+		    initializeGpWall(currentAnimation.getWidth(), currentAnimation.getHeigh());
+		    currentMotif = currentAnimation.getMotif(1);
+		    updateIHM();
+		    setDisable(false);
+	    }
+	    else{	    	
+	    	Alert alert = new Alert(AlertType.ERROR);
+	    	alert.setTitle("Error");
+	    	alert.setHeaderText("Error");
+	    	alert.setContentText("Open error");
+	    	alert.showAndWait();
+	    }
+	}
+
+	private void initializeGpWall(int nbColumns, int nbRows){
+		gpWall = new GridPane();
+		gpWall.setPrefWidth(nbColumns * 20);
+		gpWall.setPrefHeight(nbRows * 20);
+		
+		for (int i = 0; i < nbColumns; i++) {
+			for (int j = 0; j < nbRows; j++) {
+				Rectangle myRect = new Rectangle(20, 20);
+
+				/*
+				 * Définition du comportement du rectangle suite à un
+				 * clic
+				 */
+				myRect.setOnMouseClicked(mouseHandler);
+				myRect.setFill(Color.WHITE);
+				gpWall.add(myRect, i, j);
+			}
+		}
+		
+		// Add the GridPane in the center of the borderPane
+		gpWall.setGridLinesVisible(true);
+		gpWall.setAlignment(Pos.CENTER);
+		bpWall.setCenter(gpWall);
+	}
+	
+	private void clearAMotif(Motif m){
+		for (int i = 0; i < currentAnimation.getWidth(); i++) {
+			for (int j = 0; j < currentAnimation.getHeigh(); j++) {
+				m.setColor(Color.BLACK, i, j);
+			}
+		}
+		updateWallFromMotif();
+	}
+	
+	@FXML
+	private void clearMotif(ActionEvent event){
+		clearAMotif(currentMotif);
 	}
 	
 	@FXML
@@ -135,12 +200,16 @@ public class Controller {
 				updateMotifFromWall(newMotif);
 				newMotif.setTime(currentMotif.getTime());
 			}
+			else{
+				clearAMotif(newMotif);
+			}
+				
 			
 			currentAnimation.add(currentMotif.getId(), newMotif);
 			currentMotif = newMotif;
 			btnDeleteMotif.setDisable(false);
+			
 			updateIHM();
-			updateWallFromMotif();
 		}
 	}
 	
@@ -178,7 +247,7 @@ public class Controller {
 			updateIHM();
 			updateWallFromMotif();
 		}
-		if(currentAnimation.size() != 1){
+		if(currentAnimation.size() == 1){
 			btnDeleteMotif.setDisable(true);
 		}
 		
@@ -273,7 +342,7 @@ public class Controller {
 		
 		setDisable(true);
 		
-		gpWall = new GridPane();
+		
 		currentColor = Color.BLACK;
 		
 		mouseHandler = new EventHandler<MouseEvent>() {

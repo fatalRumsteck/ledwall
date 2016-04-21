@@ -25,6 +25,11 @@ public class Animation {
 		refreshID();
 		
 	}
+	public void add(Motif m){
+		Motifs.add(m);
+		refreshID();
+		
+	}
 	public void remove(int index){
 		Motifs.remove(index-1);
 		refreshID();
