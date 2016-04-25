@@ -24,6 +24,7 @@ public class XmlBuilder {
 		racine.setAttribute(name);
 		racine.setAttribute(heigh);
 		racine.setAttribute(width);
+
 		
 		for( Motif m : animation.getMotifs()){
 			Element motif = new Element("Motif");

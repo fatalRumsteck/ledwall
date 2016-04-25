@@ -7,6 +7,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 
 <BorderPane minHeight="430.0" minWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controller">
    <center>
@@ -30,9 +33,32 @@
                <top>
                   <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                     <items>
-                      <Button fx:id="btnPlayAll" mnemonicParsing="false" onAction="#playAllAnimation" text="PlayAll" />
-                        <Button fx:id="btnPlay" mnemonicParsing="false" onAction="#playAnimation" text="Play" />
-                        <Button fx:id="btnStop" disable="true" mnemonicParsing="false" onAction="#stopAnimation" text="Stop" />
+                    	<Button fx:id="btnPlayAll" mnemonicParsing="false" onAction="#playAllAnimation" text="">
+                           <graphic>
+                              <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../Images/play_all.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+						</Button>
+                        <Button fx:id="btnPlay" mnemonicParsing="false" onAction="#playAnimation">
+                           <graphic>
+                              <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../Images/play.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="btnStop" disable="true" mnemonicParsing="false" onAction="#stopAnimation">
+                           <graphic>
+                              <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../Images/stop.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></Button>
                         <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="1.0" />
                         <Button fx:id="btnAddEmptyMotif" mnemonicParsing="false" onAction="#addEmptyMotif" text="AddEmptyMotif" />
                         <Button fx:id="btnDuplicateMotif" mnemonicParsing="false" onAction="#duplicateMotif" text="DuplicateMotif" />
@@ -42,6 +68,28 @@
                     </items>
                   </ToolBar>
                </top>
+               <left>
+                  <Button mnemonicParsing="false" BorderPane.alignment="CENTER">
+                     <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../Images/previous.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </left>
+               <right>
+                  <Button mnemonicParsing="false" BorderPane.alignment="CENTER">
+                     <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../Images/next.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </right>
             </BorderPane>
             <VBox fx:id="vbRightPane" alignment="CENTER_LEFT">
                <children>
