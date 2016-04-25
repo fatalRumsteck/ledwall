@@ -18,9 +18,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -67,6 +71,9 @@ public class Controller {
 	
 	@FXML
 	private SplitPane spMainPane;
+	
+	@FXML
+	private MenuItem miNew, miSave, miOpen, miPlayAll, miPlay, miStop, miAddEmptyMotif, miDuplicateMotif, miDeleteMotif, miClear;
 	
 	@FXML
 	private void createNewAnimation(ActionEvent event) throws IOException {
@@ -191,20 +198,11 @@ public class Controller {
 	}
 	
 	@FXML
-	private void addMotif(ActionEvent event) {
+	private void addEmptyMotif(ActionEvent event) {
 
 		if (currentAnimation != null) {
 			Motif newMotif = new Motif(currentAnimation.getWidth(), currentAnimation.getHeigh()); 
-			
-			if((Button)event.getSource() == btnDuplicateMotif){
-				updateMotifFromWall(newMotif);
-				newMotif.setTime(currentMotif.getTime());
-			}
-			else{
-				clearAMotif(newMotif);
-			}
-				
-			
+			clearAMotif(newMotif);
 			currentAnimation.add(currentMotif.getId(), newMotif);
 			currentMotif = newMotif;
 			btnDeleteMotif.setDisable(false);
@@ -212,6 +210,21 @@ public class Controller {
 			updateIHM();
 		}
 	}
+	
+	@FXML
+	private void duplicateMotif(ActionEvent event) {
+
+		if (currentAnimation != null) {
+			Motif newMotif = new Motif(currentAnimation.getWidth(), currentAnimation.getHeigh()); 
+			updateMotifFromWall(newMotif);
+			newMotif.setTime(currentMotif.getTime());
+			currentAnimation.add(currentMotif.getId(), newMotif);
+			currentMotif = newMotif;
+			btnDeleteMotif.setDisable(false);
+			updateIHM();
+		}
+	}
+	
 	
 	@FXML
 	private void colorExamplePressed (MouseEvent event){
@@ -271,10 +284,28 @@ public class Controller {
 		btnDeleteMotif.setDisable(bool);
 		vbRightPane.setDisable(bool);
 		hbSelectMotifPane.setDisable(bool);
+		miNew.setDisable(bool);
+		miSave.setDisable(bool);
+		miOpen.setDisable(bool);
+		miPlayAll.setDisable(bool);
+		miPlay.setDisable(bool);
+		miStop.setDisable(!bool);
+		miAddEmptyMotif.setDisable(bool);
+		miDuplicateMotif.setDisable(bool);
+		miDeleteMotif.setDisable(bool);
+		miClear.setDisable(bool);
 	}
 	
 	private void setDisable(boolean bool){
 		spMainPane.setDisable(bool);
+		miSave.setDisable(bool);
+		miPlayAll.setDisable(bool);
+		miPlay.setDisable(bool);
+		miStop.setDisable(bool);
+		miAddEmptyMotif.setDisable(bool);
+		miDuplicateMotif.setDisable(bool);
+		miDeleteMotif.setDisable(bool);
+		miClear.setDisable(bool);
 	}
 	
 	@FXML
@@ -342,6 +373,17 @@ public class Controller {
 		
 		setDisable(true);
 		
+		miNew.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
+		//miNew.setGraphic();
+		miSave.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
+		miOpen.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN));
+		miPlayAll.setAccelerator(new KeyCodeCombination(KeyCode.A, KeyCombination.CONTROL_DOWN)); 
+		miPlay.setAccelerator(new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_DOWN)); 
+		miStop.setAccelerator(new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN)); 
+		miAddEmptyMotif.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN)); 
+		miDuplicateMotif.setAccelerator(new KeyCodeCombination(KeyCode.V, KeyCombination.CONTROL_DOWN));
+		miDeleteMotif.setAccelerator(new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_DOWN)); 
+		miClear.setAccelerator(new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN));
 		
 		currentColor = Color.BLACK;
 		

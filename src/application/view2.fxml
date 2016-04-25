@@ -34,8 +34,8 @@
                         <Button fx:id="btnPlay" mnemonicParsing="false" onAction="#playAnimation" text="Play" />
                         <Button fx:id="btnStop" disable="true" mnemonicParsing="false" onAction="#stopAnimation" text="Stop" />
                         <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="1.0" />
-                        <Button fx:id="btnAddEmptyMotif" mnemonicParsing="false" onAction="#addMotif" text="AddEmptyMotif" />
-                        <Button fx:id="btnDuplicateMotif" mnemonicParsing="false" onAction="#addMotif" text="DuplicateMotif" />
+                        <Button fx:id="btnAddEmptyMotif" mnemonicParsing="false" onAction="#addEmptyMotif" text="AddEmptyMotif" />
+                        <Button fx:id="btnDuplicateMotif" mnemonicParsing="false" onAction="#duplicateMotif" text="DuplicateMotif" />
                         <Button fx:id="btnDeleteMotif" mnemonicParsing="false" onAction="#deleteMotif" text="DeleteMotif" />
                         <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" />
                         <Button fx:id="btnClear" mnemonicParsing="false" onAction="#clearMotif" text="Clear" />
@@ -161,11 +161,22 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
                <items>
-                  <MenuItem mnemonicParsing="false" onAction="#createNewAnimation" text="New" />
-                  <MenuItem mnemonicParsing="false" onAction="#saveAnimation" text="Save" />
-                  <MenuItem mnemonicParsing="false" onAction="#openAnimation" text="Open" />
+                  <MenuItem fx:id="miNew" mnemonicParsing="false" onAction="#createNewAnimation" text="New" />
+                  <MenuItem fx:id="miSave" mnemonicParsing="false" onAction="#saveAnimation" text="Save" />
+                  <MenuItem fx:id="miOpen" mnemonicParsing="false" onAction="#openAnimation" text="Open" />
                </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="Animation">
+              <items>
+                <MenuItem fx:id="miPlayAll" mnemonicParsing="false" onAction="#playAllAnimation" text="Play all animation" />
+                  <MenuItem fx:id="miPlay" mnemonicParsing="false" onAction="#playAnimation" text="Play animation" />
+                  <MenuItem fx:id="miStop" mnemonicParsing="false" onAction="#stopAnimation" text="Stop" />
+                  <MenuItem fx:id="miAddEmptyMotif" mnemonicParsing="false" onAction="#addEmptyMotif" text="Add a empty motif" />
+                  <MenuItem fx:id="miDuplicateMotif" mnemonicParsing="false" onAction="#duplicateMotif" text="Duplicate current motif" />
+                  <MenuItem fx:id="miDeleteMotif" mnemonicParsing="false" onAction="#deleteMotif" text="Delete motif" />
+                  <MenuItem fx:id="miClear" mnemonicParsing="false" onAction="#clearMotif" text="Clear current motif" />
+              </items>
+            </Menu>
         </menus>
       </MenuBar>
    </top>
