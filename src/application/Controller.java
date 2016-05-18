@@ -3,6 +3,8 @@ package application;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
+
 import org.jdom2.*;
 
 import javafx.beans.value.ChangeListener;
@@ -37,7 +39,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class Controller {
-
+	
+	private LinkedList<WallPanel> currentWallConfig;
 	private Animation currentAnimation;
 	private Motif currentMotif;
 	private GridPane gpWall;
@@ -73,17 +76,18 @@ public class Controller {
 	private SplitPane spMainPane;
 	
 	@FXML
-	private MenuItem miNew, miSave, miOpen, miPlayAll, miPlay, miStop, miAddEmptyMotif, miDuplicateMotif, miDeleteMotif, miClear;
+	private MenuItem miNew, miSave, miOpen, miPlayAll, miPlay, miStop, miAddEmptyMotif, miDuplicateMotif, miDeleteMotif, miClear, miDefWall;
 	
 	@FXML
 	private void createNewAnimation(ActionEvent event) throws IOException {
 		HashMap<String, String> hmInformation = new HashMap<String, String>();
 
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("popupCreateAnim.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("createAnimView.fxml"));
 		VBox root = (VBox) loader.load();
 
 		PopupController popupController = loader.<PopupController> getController();
 		popupController.sethmInformation(hmInformation);
+		popupController.initialization();
 
 		Scene scene = new Scene(root);
 
@@ -115,6 +119,25 @@ public class Controller {
 			} else {
 				// throw something
 			}
+		}
+	}
+	
+	@FXML
+	private void defineWallStructure(ActionEvent event) throws IOException {
+		
+		if(currentAnimation != null){
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("structView.fxml"));
+			BorderPane root = (BorderPane) loader.load();
+	
+			StructController structController = loader.<StructController> getController();
+			structController.initialization(currentAnimation);
+	
+			Scene scene = new Scene(root);
+	
+			Stage structStage = new Stage();
+			structStage.setScene(scene);
+			structStage.initModality(Modality.APPLICATION_MODAL);
+			structStage.showAndWait();
 		}
 	}
 	
@@ -166,11 +189,6 @@ public class Controller {
 		for (int i = 0; i < nbColumns; i++) {
 			for (int j = 0; j < nbRows; j++) {
 				Rectangle myRect = new Rectangle(20, 20);
-
-				/*
-				 * Définition du comportement du rectangle suite à un
-				 * clic
-				 */
 				myRect.setOnMouseClicked(mouseHandler);
 				myRect.setFill(Color.WHITE);
 				gpWall.add(myRect, i, j);

@@ -14,7 +14,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("view2.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("mainView.fxml"));
 			BorderPane root = (BorderPane) loader.load();
 
 			Scene scene = new Scene(root);
