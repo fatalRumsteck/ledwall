@@ -1,5 +1,6 @@
-package application;
+package model;
 
+import controller.Controller;
 import javafx.scene.shape.Rectangle;
 
 public class PlayThread extends Thread{

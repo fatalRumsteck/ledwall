@@ -6,15 +6,14 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-
-<VBox maxHeight="130.0" maxWidth="300.0" minHeight="130.0" minWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="130.0" maxWidth="300.0" minHeight="130.0" minWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddPanelController">
    <children>
       <HBox alignment="CENTER_LEFT" prefHeight="36.0" prefWidth="347.0">
          <children>
             <Label text="Corner n°1 :    x : " />
-            <TextField prefHeight="25.0" prefWidth="82.0" />
+            <TextField fx:id="tfCorner1x" prefHeight="25.0" prefWidth="82.0" text="0" />
             <Label text=" / y : " />
-            <TextField prefHeight="25.0" prefWidth="82.0" />
+            <TextField fx:id="tfCorner1y" prefHeight="25.0" prefWidth="82.0" text="0" />
          </children>
          <VBox.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -23,9 +22,9 @@
       <HBox alignment="CENTER_LEFT" prefHeight="36.0" prefWidth="347.0">
          <children>
             <Label text="Corner n°2 :    x : " />
-            <TextField prefHeight="25.0" prefWidth="82.0" />
+            <TextField fx:id="tfCorner2x" prefHeight="25.0" prefWidth="82.0" text="0" />
             <Label text=" / y : " />
-            <TextField prefHeight="25.0" prefWidth="82.0" />
+            <TextField fx:id="tfCorner2y" prefHeight="25.0" prefWidth="82.0" text="0" />
          </children>
          <VBox.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -33,7 +32,7 @@
       </HBox>
       <HBox alignment="CENTER_RIGHT" prefHeight="14.0" prefWidth="280.0">
          <children>
-            <Button mnemonicParsing="false" text="Finish">
+            <Button mnemonicParsing="false" onAction="#finishPressed" prefHeight="27.0" prefWidth="52.0" text="Finish">
                <HBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </HBox.margin>
@@ -41,7 +40,7 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </Button>
-            <Button mnemonicParsing="false" text="Cancel">
+            <Button mnemonicParsing="false" onAction="#cancelPressed" prefHeight="27.0" prefWidth="57.0" text="Cancel">
                <HBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </HBox.margin>

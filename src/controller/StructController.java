@@ -1,8 +1,11 @@
-package application;
+package controller;
 
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.stream.Collectors;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -12,8 +15,10 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -22,13 +27,17 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import model.Animation;
+import model.WallPanel;
 
 public class StructController {
 	
 	private GridPane gpWall;
 	private Animation animation;
-	private ArrayList<WallPanel> panelList;
+	private LinkedList<WallPanel> panelList;
 	private EventHandler<ActionEvent> btnSuppHandler;
+	ArrayList<Color> colorList;
+	
 	
 	@FXML
 	private BorderPane bpMainPane;
@@ -37,9 +46,13 @@ public class StructController {
 	private VBox vbListPanel;
 	
 	public  void initialization(Animation animation){
+		colorList = new ArrayList<Color>();
+		colorList.add(new Color(1, 0, 0, 0.25));
+		colorList.add(new Color(1, 1, 0, 0.25));
+		
 		this.animation = animation;
 		
-		panelList = new ArrayList<WallPanel>();
+		panelList = new LinkedList<WallPanel>();
 		
 		gpWall = new GridPane();
 		gpWall.setPrefWidth(animation.getWidth() * 20);
@@ -79,26 +92,39 @@ public class StructController {
 	@FXML
 	private void addPanel(ActionEvent event) throws IOException{
 		WallPanel newPanel = new WallPanel();
-		newPanel.setCorner1(0, 0);
-		newPanel.setCorner2(1, 1);
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/addPanelView.fxml"));
+		VBox root = (VBox) loader.load();
+		AddPanelController controller = loader.<AddPanelController> getController();
 		
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("addPanelController.fxml"));
-		BorderPane root = (BorderPane) loader.load();
-
-		addPanelController controller = loader.<addPanelController> getController();
-		controller.initialization(newPanel);
-
+		controller.initialization(animation);
+		controller.setNewPanel(newPanel);
+		
 		Scene scene = new Scene(root);
-
 		Stage addPanelStage = new Stage();
+		
 		addPanelStage.setScene(scene);
 		addPanelStage.initModality(Modality.APPLICATION_MODAL);
 		addPanelStage.showAndWait();
 		
 		if(newPanel != null){
-			newPanel.setId(panelList.size()+1);
-			addListPanel(newPanel);
-			panelList.add(newPanel);
+			
+			LinkedList<WallPanel> listSuperposition = WallPanel.checkPanel(newPanel, panelList);
+			
+			if(listSuperposition.size() == 0){
+				newPanel.setId(panelList.size()+1);
+				addListPanel(newPanel);
+				updateWall(newPanel);
+				panelList.add(newPanel);
+			}
+			else{
+				Alert alert = new Alert(AlertType.ERROR);
+		    	alert.setTitle("Error");
+		    	alert.setHeaderText("Error");
+		    	StringBuffer message = new StringBuffer("The new panel conflict with :\n");
+		    	listSuperposition.forEach(panel -> message.append(panel.toString() + "\n"));
+		    	alert.setContentText(message.toString());
+		    	alert.showAndWait();
+			}
 		}
 	}
 	
@@ -119,9 +145,14 @@ public class StructController {
 		mainBox.getChildren().add(lbInfo);
 		mainBox.getChildren().add(btnSupp);
 		
-		vbListPanel.getChildren().add(mainBox);
-		
+		vbListPanel.getChildren().add(mainBox);		
 	}
 
+	private void updateWall(WallPanel panel){
+		gpWall.getChildren().stream()
+							.filter(node -> (GridPane.getColumnIndex(node) >= panel.getCorner1().getX() && GridPane.getColumnIndex(node) <= panel.getCorner2().getX() 
+											 && GridPane.getRowIndex(node) >= panel.getCorner1().getY() && GridPane.getRowIndex(node) <= panel.getCorner2().getY()))
+							.forEach(node -> ((Rectangle)node).setFill(colorList.get((panel.getId()-1)%2)));
+	}
 	
 }

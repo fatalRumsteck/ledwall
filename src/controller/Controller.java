@@ -1,7 +1,8 @@
-package application;
+package controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -37,6 +38,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import model.Animation;
+import model.Motif;
+import model.PlayThread;
+import model.WallPanel;
+import model.XmlBuilder;
 
 public class Controller {
 	
@@ -82,7 +88,7 @@ public class Controller {
 	private void createNewAnimation(ActionEvent event) throws IOException {
 		HashMap<String, String> hmInformation = new HashMap<String, String>();
 
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("createAnimView.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/createAnimView.fxml"));
 		VBox root = (VBox) loader.load();
 
 		PopupController popupController = loader.<PopupController> getController();
@@ -126,7 +132,7 @@ public class Controller {
 	private void defineWallStructure(ActionEvent event) throws IOException {
 		
 		if(currentAnimation != null){
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("structView.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/structView.fxml"));
 			BorderPane root = (BorderPane) loader.load();
 	
 			StructController structController = loader.<StructController> getController();
@@ -334,6 +340,7 @@ public class Controller {
 	}
 	
 	static public Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
+		
 		for (Node node : gridPane.getChildren()) {
 			if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
 				return node;
