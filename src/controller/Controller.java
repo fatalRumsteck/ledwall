@@ -43,6 +43,7 @@ import model.Motif;
 import model.PlayThread;
 import model.WallPanel;
 import model.XmlBuilder;
+import model.Converter;
 
 public class Controller {
 	
@@ -82,7 +83,7 @@ public class Controller {
 	private SplitPane spMainPane;
 	
 	@FXML
-	private MenuItem miNew, miSave, miOpen, miPlayAll, miPlay, miStop, miAddEmptyMotif, miDuplicateMotif, miDeleteMotif, miClear, miDefWall;
+	private MenuItem miNew, miSave, miOpen, miPlayAll, miPlay, miStop, miAddEmptyMotif, miDuplicateMotif, miDeleteMotif, miClear, miDefWall, miStartConv;
 	
 	@FXML
 	private void createNewAnimation(ActionEvent event) throws IOException {
@@ -251,6 +252,29 @@ public class Controller {
 	
 	
 	@FXML
+	private void startPanelConvertion(ActionEvent event){
+		WallPanel p1 = new WallPanel();
+		WallPanel p2 = new WallPanel();
+		
+		p1.setId(1);
+		p2.setId(2);
+		
+		p1.setCorner1(0, 0);
+		p1.setCorner2(0, 1);
+		
+		p2.setCorner1(1, 0);
+		p2.setCorner2(1, 1);
+		
+		currentWallConfig.add(p1);
+		currentWallConfig.add(p2);
+		
+		Converter c1 = new Converter(currentWallConfig, currentAnimation);
+		if(c1.startConvertion()){
+			
+		}
+	}
+	
+	@FXML
 	private void colorExamplePressed (MouseEvent event){
 		Rectangle rect = (Rectangle)event.getSource();
 		Color rectColor = (Color)rect.getFill();
@@ -395,7 +419,7 @@ public class Controller {
 	}
 	
 	public void initialization() {
-		
+		currentWallConfig = new LinkedList<WallPanel>();
 		setDisable(true);
 		
 		miNew.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
