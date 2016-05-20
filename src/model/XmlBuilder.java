@@ -1,4 +1,4 @@
-package application;
+package model;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -11,7 +11,7 @@ import javafx.scene.paint.Color;
 
 public class XmlBuilder {
 	
-	static org.jdom2.Document buildXML(Animation animation){
+	static public org.jdom2.Document buildXML(Animation animation){
 		
 		Element racine = new Element("Animation");
 		org.jdom2.Document document = new Document(racine);
@@ -64,7 +64,7 @@ public class XmlBuilder {
 		return document;
 	}
 	
-	static void saveXML(String fichier, Document document)
+	static public void saveXML(String fichier, Document document)
 	{
 	   try
 	   {
@@ -75,7 +75,7 @@ public class XmlBuilder {
 	   catch (java.io.IOException e){}
 	} 
 	
-	static Animation openAnimation(String file){
+	static public Animation openAnimation(String file){
 		SAXBuilder sxb = new SAXBuilder();
 	    Document document = null;
 	    Element racine = null;
