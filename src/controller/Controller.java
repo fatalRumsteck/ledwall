@@ -269,20 +269,20 @@ public class Controller {
 	
 	@FXML
 	private void startPanelConvertion(ActionEvent event){
-		WallPanel p1 = new WallPanel();
-		WallPanel p2 = new WallPanel();
-		
-		p1.setId(1);
-		p2.setId(2);
-		
-		p1.setCorner1(0, 0);
-		p1.setCorner2(0, 1);
-		
-		p2.setCorner1(1, 0);
-		p2.setCorner2(1, 1);
-		
-		currentWallConfig.add(p1);
-		currentWallConfig.add(p2);
+//		WallPanel p1 = new WallPanel();
+//		WallPanel p2 = new WallPanel();
+//		
+//		p1.setId(1);
+//		p2.setId(2);
+//		
+//		p1.setCorner1(0, 0);
+//		p1.setCorner2(0, 1);
+//		
+//		p2.setCorner1(1, 0);
+//		p2.setCorner2(1, 1);
+//		
+//		currentWallConfig.add(p1);
+//		currentWallConfig.add(p2);
 		
 		Converter c1 = new Converter(currentWallConfig, currentAnimation);
 		if(c1.startConvertion()){

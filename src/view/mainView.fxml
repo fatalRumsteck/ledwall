@@ -284,6 +284,7 @@
             <Menu mnemonicParsing="false" text="Convert">
               <items>
                 <MenuItem fx:id="miDefWall" mnemonicParsing="false" onAction="#defineWallStructure" text="Define wall structure" />
+                  <MenuItem fx:id="miStartConv" mnemonicParsing="false" onAction="#startPanelConvertion" text="Start convertion" />
               </items>
             </Menu>
         </menus>

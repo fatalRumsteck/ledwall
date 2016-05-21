@@ -20,32 +20,12 @@ public class Converter {
 		this.folderPath = "";
 	}
 	
-	public boolean startConvertion(){
-		// Parcours de wallpanel
-			
-			// Récu nb motifs
-			
-			// Parcours des Motifs
-				
-				// Récu du temps
-		
-				// Parcours des LED
-					
-					// Récu couleur
-					
-				// Fin Parcours LED
-				
-			// Fin Parcours Motfs
-			
-			// Création du fichier texte
-			
-		// Fin Parcours WallPanels
-		
-		
+	public boolean startConvertion(){		
 		String  chaine = "";
 		String animationName = animation.getName();
+		
 		boolean folderCreated = true;
-		folderPath = "D:\\POLYTECH\\DII4A\\PROJETS\\LED Wall\\INFO\\" + animationName;
+		folderPath = "../" + animationName;
 		File folder;
 		folder = new File(folderPath);
 		if(!folder.exists()){
@@ -56,17 +36,30 @@ public class Converter {
 		
 		for(WallPanel currPanel : panels){
 			int nbMotif = animation.size();
-			int idPanel = currPanel.getId();			
+			int idPanel = currPanel.getId();
+			int xmin = currPanel.getCorner1().x;
+			int xmax = currPanel.getCorner2().x + 1;
+			int ymin = currPanel.getCorner1().y;
+			int ymax = currPanel.getCorner2().y + 1;
+			int red, green, blue;
 
-			filePath = "D:\\POLYTECH\\DII4A\\PROJETS\\LED Wall\\INFO\\" + animationName + "\\" + "panel" + idPanel + ".txt";
+			filePath = "../" + animationName + "/" + "panel" + idPanel + ".txt";
 			FileWriter writer;
 			chaine += (char)nbMotif;
 			for(int i = 1; i <= nbMotif; i++){
-				chaine += (char)animation.getMotif(i).getTime();
-				LinkedList<Color> leds;
-				leds = animation.getMotif(i).getLeds();
-				for(int j = 0; j < leds.size(); ++j){
-					chaine += leds.get(j);
+				chaine += (char)animation.getMotif(i).getTime(); 
+				Color led;
+				for(int x = xmin; x < xmax; x++){
+					for(int y = ymin; y < ymax; y++){
+						led = animation.getMotif(i).getColor(x, y);
+						red 	= (int) (led.getRed() 	* 255);
+						green 	= (int) (led.getGreen() * 255);
+						blue	= (int) (led.getBlue() 	* 255);
+//						chaine += " R:" + red + " G:" + green + " B:" + blue;
+						chaine += (char)red; 
+						chaine += (char)green; 
+						chaine += (char)blue;
+					}
 				}
 			}
 			try {
