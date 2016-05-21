@@ -121,7 +121,7 @@
                   </ToolBar>
                </top>
                <left>
-                  <Button mnemonicParsing="false" BorderPane.alignment="CENTER">
+                  <Button id="left" fx:id="btnLeft" mnemonicParsing="false" onAction="#btnChangeMotifPressed" BorderPane.alignment="CENTER">
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -132,7 +132,7 @@
                   </Button>
                </left>
                <right>
-                  <Button mnemonicParsing="false" BorderPane.alignment="CENTER">
+                  <Button id="right" fx:id="btnRight" mnemonicParsing="false" onAction="#btnChangeMotifPressed" BorderPane.alignment="CENTER">
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -247,9 +247,13 @@
                   </HBox>
                   <HBox alignment="CENTER">
                      <children>
-                        <Rectangle fx:id="rectColor" arcHeight="5.0" arcWidth="5.0" height="75.0" stroke="BLACK" strokeType="INSIDE" width="75.0" />
+                        <Rectangle fx:id="rectColor" arcHeight="5.0" arcWidth="5.0" height="75.0" stroke="BLACK" strokeType="INSIDE" width="75.0">
+                           <HBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </HBox.margin></Rectangle>
                      </children>
                   </HBox>
+                  <Button fx:id="btnFillMotif" minHeight="25.0" minWidth="180.0" mnemonicParsing="false" onAction="#fillMotif" text="Fill the motif" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -280,7 +284,6 @@
             <Menu mnemonicParsing="false" text="Convert">
               <items>
                 <MenuItem fx:id="miDefWall" mnemonicParsing="false" onAction="#defineWallStructure" text="Define wall structure" />
-                  <MenuItem fx:id="miStartConv" mnemonicParsing="false" onAction="#startPanelConvertion" text="Start convertion" />
               </items>
             </Menu>
         </menus>

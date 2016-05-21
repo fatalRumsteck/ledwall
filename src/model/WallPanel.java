@@ -37,15 +37,19 @@ public class WallPanel {
 		corner2.setLocation(x, y);
 	}
 	
-	static public LinkedList<WallPanel> checkPanel(WallPanel panel, LinkedList<WallPanel> list){
+	public LinkedList<WallPanel> checkPanel(LinkedList<WallPanel> list){
 		return list.stream()
-				   .filter(wp -> testSuperposition(panel, wp))
+				   .filter(wp -> testSuperposition(this, wp))
 				   .collect(Collectors.toCollection(LinkedList::new));
 	}
 	
-	static private boolean testSuperposition(WallPanel panel1, WallPanel panel2){
+	private boolean testSuperposition(WallPanel panel1, WallPanel panel2){
 		return (((panel2.corner1.x >= panel1.corner1.x) && (panel2.corner1.x <= panel1.corner2.x)) || ((panel2.corner2.x >= panel1.corner1.x) && (panel2.corner2.x <= panel1.corner2.x)))
 				&& (((panel2.corner1.y >= panel1.corner1.y) && (panel2.corner1.y <= panel1.corner2.y)) || ((panel2.corner2.y >= panel1.corner1.y) && (panel2.corner2.y <= panel1.corner2.y)));
+	}
+	
+	public boolean IsCorrect(){
+		return corner1.x <= corner2.x || corner1.y <= corner2.y;
 	}
 	
 	public String toString(){

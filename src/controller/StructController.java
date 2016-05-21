@@ -45,14 +45,16 @@ public class StructController {
 	@FXML
 	private VBox vbListPanel;
 	
-	public  void initialization(Animation animation){
+	public  void initialization(Animation animation, LinkedList<WallPanel> listPanel){
 		colorList = new ArrayList<Color>();
 		colorList.add(new Color(1, 0, 0, 0.25));
+		colorList.add(new Color(0, 1, 0, 0.25));
+		colorList.add(new Color(1, 0.5, 0, 0.25));
+		colorList.add(new Color(0, 0, 1, 0.25));
 		colorList.add(new Color(1, 1, 0, 0.25));
 		
 		this.animation = animation;
-		
-		panelList = new LinkedList<WallPanel>();
+		this.panelList = listPanel;
 		
 		gpWall = new GridPane();
 		gpWall.setPrefWidth(animation.getWidth() * 20);
@@ -69,33 +71,46 @@ public class StructController {
 		// Add the GridPane in the center of the borderPane
 		gpWall.setGridLinesVisible(true);
 		gpWall.setAlignment(Pos.CENTER);
-		bpMainPane.setCenter(gpWall);
-		
+		bpMainPane.setCenter(gpWall);		
 		
 		btnSuppHandler = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				Button btn = (Button) event.getSource();
-				Node nodeToRemove = null;
 				
-				for(Node child: vbListPanel.getChildren()){
-				    if(child.getId().equals(btn.getParent().getId())){
-				    	nodeToRemove = child;
-				    }
-				}
-				vbListPanel.getChildren().remove(nodeToRemove);
-				panelList.remove(Integer.valueOf(btn.getParent().getId())-1);
+				vbListPanel.getChildren()
+				   		   .stream()
+				   		   .filter(child -> Integer.valueOf(child.getId()) >= Integer.valueOf(btn.getParent().getId()))
+				   		   .collect(Collectors.toCollection(ArrayList::new))
+				   		   .forEach(node -> vbListPanel.getChildren().remove(node));
+				
+				removeNodesAndUpdateWall(Integer.valueOf(btn.getParent().getId()));
 			}
 		};
+		
+		if(panelList.size() != 0 ){
+			panelList.forEach(panel -> addPanelIHM(panel));
+		}
+	}
+	
+	private void removeNodesAndUpdateWall(Integer index){
+
+		panelList.stream()
+				 .filter(panel -> panel.getId() >= index)
+				 .collect(Collectors.toCollection(ArrayList::new))
+				 .forEach(panel -> {
+					 updateWall(panel, Color.WHITE);
+					 panelList.remove(panel);
+				 });
 	}
 	
 	@FXML
-	private void addPanel(ActionEvent event) throws IOException{
+	private void addPanelPressed(ActionEvent event) throws IOException{
 		WallPanel newPanel = new WallPanel();
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/addPanelView.fxml"));
 		VBox root = (VBox) loader.load();
-		AddPanelController controller = loader.<AddPanelController> getController();
 		
+		AddPanelController controller = loader.<AddPanelController> getController();
 		controller.initialization(animation);
 		controller.setNewPanel(newPanel);
 		
@@ -108,37 +123,49 @@ public class StructController {
 		
 		if(newPanel != null){
 			
-			LinkedList<WallPanel> listSuperposition = WallPanel.checkPanel(newPanel, panelList);
 			
-			if(listSuperposition.size() == 0){
+			boolean panelOk = newPanel.IsCorrect();
+			LinkedList<WallPanel> listSuperposition = newPanel.checkPanel(panelList);
+			
+			if(listSuperposition.size() == 0 && panelOk){
 				newPanel.setId(panelList.size()+1);
-				addListPanel(newPanel);
-				updateWall(newPanel);
+				addPanelIHM(newPanel);
 				panelList.add(newPanel);
 			}
 			else{
 				Alert alert = new Alert(AlertType.ERROR);
 		    	alert.setTitle("Error");
 		    	alert.setHeaderText("Error");
-		    	StringBuffer message = new StringBuffer("The new panel conflict with :\n");
-		    	listSuperposition.forEach(panel -> message.append(panel.toString() + "\n"));
+		    	StringBuffer message = new StringBuffer("");
+		    	if(listSuperposition.size() != 0){
+		    		message.append("The new panel conflict with :\n");
+		    		listSuperposition.forEach(panel -> message.append(panel.toString() + "\n"));
+		    	} else {
+		    		message.append("Please set the corner1 as the top left led of the panel\nand the corner1 as the bottom right");
+		    	}
 		    	alert.setContentText(message.toString());
 		    	alert.showAndWait();
 			}
 		}
 	}
 	
+	private void addPanelIHM(WallPanel newPanel){
+		addListPanel(newPanel);
+		updateWall(newPanel, colorList.get((newPanel.getId()-1)%colorList.size()));
+	}
+	
+	
 	private void addListPanel(WallPanel panel){
 		HBox mainBox = new HBox();
-		mainBox.setId(String.valueOf(panelList.size()+1));
+		mainBox.setId(String.valueOf(panel.getId()));
 		mainBox.setAlignment(Pos.CENTER_LEFT);
 		mainBox.setPadding(new Insets(5,5,5,5));
 		
 		String info;
 		//Label lbNum = new Label("n°");
-		info = "n°" + String.valueOf(panelList.size()+1) + " : " + (int)panel.getCorner1().getX() + "x" + (int)panel.getCorner1().getY() + " - " + (int)panel.getCorner2().getX() + "x" + (int)panel.getCorner2().getY() + "     ";
+		info = "n°" + String.valueOf(panel.getId()) + " : " + (int)panel.getCorner1().getX() + "x" + (int)panel.getCorner1().getY() + " - " + (int)panel.getCorner2().getX() + "x" + (int)panel.getCorner2().getY() + "     ";
 		Label lbInfo = new Label(info);
-		
+		lbInfo.setId("str");
 		Button btnSupp = new Button("X");
 		btnSupp.setOnAction(btnSuppHandler);
 		
@@ -148,11 +175,21 @@ public class StructController {
 		vbListPanel.getChildren().add(mainBox);		
 	}
 
-	private void updateWall(WallPanel panel){
+	private void updateWall(WallPanel panel, Color color){
 		gpWall.getChildren().stream()
-							.filter(node -> (GridPane.getColumnIndex(node) >= panel.getCorner1().getX() && GridPane.getColumnIndex(node) <= panel.getCorner2().getX() 
-											 && GridPane.getRowIndex(node) >= panel.getCorner1().getY() && GridPane.getRowIndex(node) <= panel.getCorner2().getY()))
-							.forEach(node -> ((Rectangle)node).setFill(colorList.get((panel.getId()-1)%2)));
+							.filter(node -> nodeIsAffected(node, panel))
+							.forEach(node -> ((Rectangle)node).setFill(color));
+		
+	}
+	
+	private boolean nodeIsAffected(Node node, WallPanel panel){
+		
+		if(GridPane.getColumnIndex(node) == null || GridPane.getRowIndex(node) == null){
+			return false;
+		} else {
+			return (GridPane.getColumnIndex(node) >= (int)panel.getCorner1().x && GridPane.getColumnIndex(node) <= (int)panel.getCorner2().x
+					&& GridPane.getRowIndex(node) >= (int)panel.getCorner1().y && GridPane.getRowIndex(node) <= (int)panel.getCorner2().y);	
+		}
 	}
 	
 }

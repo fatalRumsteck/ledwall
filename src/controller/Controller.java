@@ -2,7 +2,6 @@ package controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -62,8 +61,8 @@ public class Controller {
 	private Rectangle rectColor;
 
 	@FXML
-	private Button btnPlay, btnPlayAll, btnStop, btnAddEmptyMotif, btnDuplicateMotif, btnDeleteMotif, btnClear;
-
+	private Button btnPlay, btnPlayAll, btnStop, btnAddEmptyMotif, btnDuplicateMotif, btnDeleteMotif, btnClear, btnFillMotif, btnRight, btnLeft;
+	
 	@FXML
 	private Label lbMotifNumber;
 
@@ -137,7 +136,7 @@ public class Controller {
 			BorderPane root = (BorderPane) loader.load();
 	
 			StructController structController = loader.<StructController> getController();
-			structController.initialization(currentAnimation);
+			structController.initialization(currentAnimation, currentWallConfig);
 	
 			Scene scene = new Scene(root);
 	
@@ -145,6 +144,23 @@ public class Controller {
 			structStage.setScene(scene);
 			structStage.initModality(Modality.APPLICATION_MODAL);
 			structStage.showAndWait();
+		}
+	}
+	
+	@FXML
+	private void fillMotif(ActionEvent event){
+		gpWall.getChildren().stream()
+							.filter(node -> GridPane.getColumnIndex(node) != null)
+							.forEach(node -> ((Rectangle)node).setFill(currentColor));
+		updateMotifFromWall();
+	}
+	
+	@FXML
+	private void btnChangeMotifPressed(ActionEvent event){
+		if(((Button)event.getSource()).getId().equals("right")){
+			tfMotifNumber.setText(String.valueOf(Integer.valueOf(tfMotifNumber.getText())+1));
+		} else {
+			tfMotifNumber.setText(String.valueOf(Integer.valueOf(tfMotifNumber.getText())-1));	
 		}
 	}
 	
