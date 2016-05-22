@@ -75,11 +75,12 @@ public class XmlBuilder {
 	   catch (java.io.IOException e){}
 	} 
 	
-	static public Animation openAnimation(String file){
+	static public Animation openXML(String file){
 		SAXBuilder sxb = new SAXBuilder();
 	    Document document = null;
 	    Element racine = null;
 	    Animation animation = null;
+	    
 		try
 	    {
 	       //On crée un nouveau document JDOM avec en argument le fichier XML

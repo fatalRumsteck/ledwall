@@ -91,7 +91,7 @@ public class Controller {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/createAnimView.fxml"));
 		VBox root = (VBox) loader.load();
 
-		PopupController popupController = loader.<PopupController> getController();
+		CreateAnimController popupController = loader.<CreateAnimController> getController();
 		popupController.sethmInformation(hmInformation);
 		popupController.initialization();
 
@@ -99,6 +99,7 @@ public class Controller {
 
 		Stage createAnimStage = new Stage();
 		createAnimStage.setScene(scene);
+		createAnimStage.setTitle("Create new animation");
 		createAnimStage.initModality(Modality.APPLICATION_MODAL);
 		createAnimStage.showAndWait();
 
@@ -142,6 +143,7 @@ public class Controller {
 	
 			Stage structStage = new Stage();
 			structStage.setScene(scene);
+			structStage.setTitle("Define wall structure");
 			structStage.initModality(Modality.APPLICATION_MODAL);
 			structStage.showAndWait();
 		}
@@ -189,7 +191,7 @@ public class Controller {
 		final File file = dialog.showOpenDialog(tfRed.getScene().getWindow());
 		
 	    if(file != null){
-		    currentAnimation = XmlBuilder.openAnimation(file.getPath());//file.getPath(), currentAnimation);
+		    currentAnimation = XmlBuilder.openXML(file.getPath());//file.getPath(), currentAnimation);
 		    initializeGpWall(currentAnimation.getWidth(), currentAnimation.getHeigh());
 		    currentMotif = currentAnimation.getMotif(1);
 		    updateIHM();
