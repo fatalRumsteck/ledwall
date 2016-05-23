@@ -129,6 +129,8 @@ public class Controller {
 		}
 	}
 	
+
+	
 	@FXML
 	private void defineWallStructure(ActionEvent event) throws IOException {
 		

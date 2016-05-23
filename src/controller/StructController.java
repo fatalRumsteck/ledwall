@@ -122,7 +122,7 @@ public class StructController {
 		addPanelStage.initModality(Modality.APPLICATION_MODAL);
 		addPanelStage.showAndWait();
 		
-		if(newPanel != null){
+		if(newPanel.getCorner1().x != -1){
 			
 			
 			boolean panelOk = newPanel.IsCorrect();

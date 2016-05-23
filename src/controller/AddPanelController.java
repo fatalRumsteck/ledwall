@@ -20,7 +20,6 @@ public class AddPanelController {
 	@FXML
 	private void cancelPressed (ActionEvent event){
 		Stage stage = (Stage)tfCorner1x.getScene().getWindow();
-		newPanel = null;
 		stage.close();
 	}
 	
@@ -34,6 +33,7 @@ public class AddPanelController {
 	
 	public void setNewPanel(WallPanel newPanel){
 		this.newPanel = newPanel;
+		this.newPanel.setCorner1(-1, 0);
 	}
 	
 	public void initialization(Animation animation){
