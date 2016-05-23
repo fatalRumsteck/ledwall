@@ -61,7 +61,7 @@ public class Controller {
 	private Rectangle rectColor;
 
 	@FXML
-	private Button btnPlay, btnPlayAll, btnStop, btnAddEmptyMotif, btnDuplicateMotif, btnDeleteMotif, btnClear, btnFillMotif, btnRight, btnLeft;
+	private Button btnPlay, btnPlayAll, btnStop, btnAddEmptyMotif, btnDuplicateMotif, btnDeleteMotif, btnClear, btnFillMotif, btnRight, btnLeft, btnRightShift;
 	
 	@FXML
 	private Label lbMotifNumber;
@@ -129,7 +129,31 @@ public class Controller {
 		}
 	}
 	
+	@FXML
+	private void rightShiftMotif(ActionEvent event){
+		
+		if (currentAnimation != null) {
+			Motif newMotif = new Motif(currentAnimation.getWidth(), currentAnimation.getHeigh()); 
+			
+			for(int i = 0 ; i < currentAnimation.getWidth() ; i++){
+				for(int j = 0 ; j < currentAnimation.getHeigh() ; j++){
+					if(i != currentAnimation.getWidth()-1){
+						newMotif.setColor(currentMotif.getColor(i+1, j), i, j);
+					} else {
+						newMotif.setColor(Color.BLACK, i, j);
+					}
+				}
+			}
 
+			currentAnimation.add(currentMotif.getId(), newMotif);
+			currentMotif = newMotif;
+			btnDeleteMotif.setDisable(false);
+			
+			updateIHM();
+		}
+		
+
+	}
 	
 	@FXML
 	private void defineWallStructure(ActionEvent event) throws IOException {
