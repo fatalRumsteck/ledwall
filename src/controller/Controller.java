@@ -61,7 +61,7 @@ public class Controller {
 	private Rectangle rectColor;
 
 	@FXML
-	private Button btnPlay, btnPlayAll, btnStop, btnAddEmptyMotif, btnDuplicateMotif, btnDeleteMotif, btnClear, btnFillMotif, btnRight, btnLeft;
+	private Button btnPlay, btnPlayAll, btnStop, btnAddEmptyMotif, btnDuplicateMotif, btnDeleteMotif, btnClear, btnFillMotif, btnRight, btnLeft, btnRightShift;
 	
 	@FXML
 	private Label lbMotifNumber;
@@ -91,7 +91,7 @@ public class Controller {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/createAnimView.fxml"));
 		VBox root = (VBox) loader.load();
 
-		PopupController popupController = loader.<PopupController> getController();
+		CreateAnimController popupController = loader.<CreateAnimController> getController();
 		popupController.sethmInformation(hmInformation);
 		popupController.initialization();
 
@@ -99,6 +99,7 @@ public class Controller {
 
 		Stage createAnimStage = new Stage();
 		createAnimStage.setScene(scene);
+		createAnimStage.setTitle("Create new animation");
 		createAnimStage.initModality(Modality.APPLICATION_MODAL);
 		createAnimStage.showAndWait();
 
@@ -129,6 +130,32 @@ public class Controller {
 	}
 	
 	@FXML
+	private void rightShiftMotif(ActionEvent event){
+		
+		if (currentAnimation != null) {
+			Motif newMotif = new Motif(currentAnimation.getWidth(), currentAnimation.getHeigh()); 
+			
+			for(int i = 0 ; i < currentAnimation.getWidth() ; i++){
+				for(int j = 0 ; j < currentAnimation.getHeigh() ; j++){
+					if(i != currentAnimation.getWidth()-1){
+						newMotif.setColor(currentMotif.getColor(i+1, j), i, j);
+					} else {
+						newMotif.setColor(Color.BLACK, i, j);
+					}
+				}
+			}
+
+			currentAnimation.add(currentMotif.getId(), newMotif);
+			currentMotif = newMotif;
+			btnDeleteMotif.setDisable(false);
+			
+			updateIHM();
+		}
+		
+
+	}
+	
+	@FXML
 	private void defineWallStructure(ActionEvent event) throws IOException {
 		
 		if(currentAnimation != null){
@@ -142,6 +169,7 @@ public class Controller {
 	
 			Stage structStage = new Stage();
 			structStage.setScene(scene);
+			structStage.setTitle("Define wall structure");
 			structStage.initModality(Modality.APPLICATION_MODAL);
 			structStage.showAndWait();
 		}
@@ -189,7 +217,7 @@ public class Controller {
 		final File file = dialog.showOpenDialog(tfRed.getScene().getWindow());
 		
 	    if(file != null){
-		    currentAnimation = XmlBuilder.openAnimation(file.getPath());//file.getPath(), currentAnimation);
+		    currentAnimation = XmlBuilder.openXML(file.getPath());//file.getPath(), currentAnimation);
 		    initializeGpWall(currentAnimation.getWidth(), currentAnimation.getHeigh());
 		    currentMotif = currentAnimation.getMotif(1);
 		    updateIHM();

@@ -118,10 +118,11 @@ public class StructController {
 		Stage addPanelStage = new Stage();
 		
 		addPanelStage.setScene(scene);
+		addPanelStage.setTitle("Add new panel");
 		addPanelStage.initModality(Modality.APPLICATION_MODAL);
 		addPanelStage.showAndWait();
 		
-		if(newPanel != null){
+		if(newPanel.getCorner1().x != -1){
 			
 			
 			boolean panelOk = newPanel.IsCorrect();

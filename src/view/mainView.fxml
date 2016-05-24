@@ -93,6 +93,19 @@
                               </ImageView>
                            </graphic>
                         </Button>
+                        <Button fx:id="btnRightShift" mnemonicParsing="false" onAction="#rightShiftMotif">
+                           <graphic>
+                              <ImageView fitHeight="20.0" fitWidth="20.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../Images/rightShift.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <tooltip>
+                              <Tooltip text="Duplicate" />
+                           </tooltip>
+                        </Button>
+                        <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" />
                         <Button fx:id="btnDeleteMotif" mnemonicParsing="false" onAction="#deleteMotif">
                            <tooltip>
                     			<Tooltip text="Delete" />
@@ -105,7 +118,6 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" />
                         <Button fx:id="btnClear" mnemonicParsing="false" onAction="#clearMotif">
                     		<tooltip>
                     			<Tooltip text="Clear" />
