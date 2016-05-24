@@ -1,8 +1,11 @@
 package model;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.LinkedList;
 import javafx.scene.paint.Color;
 
@@ -44,14 +47,15 @@ public class Converter {
 			int red, green, blue;
 
 			filePath = "../" + animationName + "/" + "panel" + idPanel + ".txt";
-			FileWriter writer;
+			BufferedWriter writer;
 			chaine += (char)nbMotif;
 			for(int i = 1; i <= nbMotif; i++){
-				chaine += (char)animation.getMotif(i).getTime(); 
-				Color led;
+				chaine += (char)((int)(animation.getMotif(i).getTime()/255));
+				chaine += (char)(animation.getMotif(i).getTime()%255);
+				
 				for(int x = xmin; x < xmax; x++){
 					for(int y = ymin; y < ymax; y++){
-						led = animation.getMotif(i).getColor(x, y);
+						Color led = animation.getMotif(i).getColor(x, y);
 						red 	= (int) (led.getRed() 	* 255);
 						green 	= (int) (led.getGreen() * 255);
 						blue	= (int) (led.getBlue() 	* 255);
@@ -63,7 +67,7 @@ public class Converter {
 				}
 			}
 			try {
-				writer = new FileWriter(filePath);
+				writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath)));
 				writer.write(chaine);
 				writer.close();
 			} catch (IOException e) {
