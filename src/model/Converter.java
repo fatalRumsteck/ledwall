@@ -24,13 +24,13 @@ public class Converter {
 		String  chaine = "";
 		String animationName = animation.getName();
 		
-		boolean folderCreated = true;
+		boolean status = true;
 		folderPath = "../" + animationName;
 		File folder;
 		folder = new File(folderPath);
 		if(!folder.exists()){
 			if(!folder.mkdir()){
-				folderCreated = false;
+				status = false;
 			}
 		}
 		
@@ -68,10 +68,11 @@ public class Converter {
 				writer.close();
 			} catch (IOException e) {
 				e.printStackTrace();
+				status = false;
 			}
 			chaine = "";
 		}
-		return true;
+		return status;
 	}
 	
 	
