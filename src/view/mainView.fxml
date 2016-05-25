@@ -289,6 +289,7 @@
                   <MenuItem fx:id="miStop" mnemonicParsing="false" onAction="#stopAnimation" text="Stop" />
                   <MenuItem fx:id="miAddEmptyMotif" mnemonicParsing="false" onAction="#addEmptyMotif" text="Add a empty motif" />
                   <MenuItem fx:id="miDuplicateMotif" mnemonicParsing="false" onAction="#duplicateMotif" text="Duplicate current motif" />
+                  <MenuItem fx:id="miRightShift" mnemonicParsing="false" onAction="#rightShiftMotif" text="Right shift" />
                   <MenuItem fx:id="miDeleteMotif" mnemonicParsing="false" onAction="#deleteMotif" text="Delete motif" />
                   <MenuItem fx:id="miClear" mnemonicParsing="false" onAction="#clearMotif" text="Clear current motif" />
               </items>
@@ -297,6 +298,11 @@
               <items>
                 <MenuItem fx:id="miDefWall" mnemonicParsing="false" onAction="#defineWallStructure" text="Define wall structure" />
                   <MenuItem fx:id="miStartConv" mnemonicParsing="false" onAction="#startPanelConvertion" text="Start convertion" />
+              </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="?">
+              <items>
+                <MenuItem fx:id="miAbout" mnemonicParsing="false" onAction="#aboutPressed" text="About" />
               </items>
             </Menu>
         </menus>

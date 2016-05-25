@@ -82,7 +82,7 @@ public class Controller {
 	private SplitPane spMainPane;
 	
 	@FXML
-	private MenuItem miNew, miSave, miOpen, miPlayAll, miPlay, miStop, miAddEmptyMotif, miDuplicateMotif, miDeleteMotif, miClear, miDefWall, miStartConv;
+	private MenuItem miNew, miSave, miOpen, miPlayAll, miPlay, miStop, miAddEmptyMotif, miDuplicateMotif, miDeleteMotif, miClear, miDefWall, miStartConv, miRightShift;
 	
 	@FXML
 	private void createNewAnimation(ActionEvent event) throws IOException {
@@ -392,6 +392,7 @@ public class Controller {
 		miDuplicateMotif.setDisable(bool);
 		miDeleteMotif.setDisable(bool);
 		miClear.setDisable(bool);
+		miRightShift.setDisable(bool);
 		btnRightShift.setDisable(bool);
 	}
 	
@@ -412,6 +413,7 @@ public class Controller {
 		btnRight.setDisable(bool); 
 		btnLeft.setDisable(bool);
 		btnRightShift.setDisable(bool);
+		miRightShift.setDisable(bool);
 	}
 	
 	@FXML
@@ -491,7 +493,7 @@ public class Controller {
 		miDuplicateMotif.setAccelerator(new KeyCodeCombination(KeyCode.V, KeyCombination.CONTROL_DOWN));
 		miDeleteMotif.setAccelerator(new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_DOWN)); 
 		miClear.setAccelerator(new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN));
-		
+		miRightShift.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN));		
 		currentColor = Color.BLACK;
 		
 		mouseHandler = new EventHandler<MouseEvent>() {
