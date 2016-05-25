@@ -303,16 +303,24 @@ public class Controller {
 		Converter c1 = new Converter(currentWallConfig, currentAnimation);
 		Alert error_alert = new Alert(AlertType.ERROR);
 		Alert info_alert = new Alert(AlertType.INFORMATION);
-		if(!c1.startConvertion()){
+		
+		if(!currentWallConfig.isEmpty()){
+			if(!c1.startConvertion()){
+				error_alert.setTitle("Error");
+				error_alert.setHeaderText("Convertion error");
+				error_alert.setContentText("An error appeared during the convertion");
+				error_alert.showAndWait();
+			} else {
+				info_alert.setTitle("Success");
+				info_alert.setHeaderText("Convertion done");
+				info_alert.setContentText("Convertion done successfully");
+				info_alert.showAndWait();
+			}
+		} else{
 			error_alert.setTitle("Error");
-			error_alert.setHeaderText("Convertion error");
-			error_alert.setContentText("An error appeared during the convertion");
-			error_alert.showAndWait();
-		} else {
-			info_alert.setTitle("Success");
-			info_alert.setHeaderText("Convertion done");
-			info_alert.setContentText("Convertion done successfully");
-			info_alert.showAndWait();
+			error_alert.setHeaderText("Structure error");
+			error_alert.setContentText("No wall panel configuration detected");
+			error_alert.showAndWait();			
 		}
 	}
 	
