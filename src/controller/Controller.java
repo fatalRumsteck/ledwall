@@ -308,11 +308,12 @@ public class Controller {
 			error_alert.setHeaderText("Convertion error");
 			error_alert.setContentText("An error appeared during the convertion");
 			error_alert.showAndWait();
+		} else {
+			info_alert.setTitle("Success");
+			info_alert.setHeaderText("Convertion done");
+			info_alert.setContentText("Convertion done successfully");
+			info_alert.showAndWait();
 		}
-		info_alert.setTitle("Success");
-		info_alert.setHeaderText("Convertion done");
-		info_alert.setContentText("Convertion done successfully");
-		error_alert.showAndWait();
 	}
 	
 	@FXML
