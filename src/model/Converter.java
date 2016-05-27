@@ -46,7 +46,7 @@ public class Converter {
 			int ymax = currPanel.getCorner2().y + 1;
 			int red, green, blue;
 
-			filePath = "../" + animationName + "/" + "panel" + idPanel + ".txt";
+			filePath = "../" + animationName + "/" + "panel" + idPanel;
 			BufferedWriter writer;
 			chaine += (char)nbMotif;
 			for(int i = 1; i <= nbMotif; i++){
